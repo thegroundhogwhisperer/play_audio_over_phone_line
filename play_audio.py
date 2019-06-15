@@ -272,107 +272,95 @@ def dial_out_play_audio(number_to_dial):
 	try:
 		exec_AT_cmd(attention_dial_tone_command)
 	except:                                        if not exec_AT_cmd("ATH"):
-703
+
                                                 print "Error: Silence - Failed to terminate the call"
-704
+
                                                 print "Trying to revoer the serial port"
-705
+
                                                 recover_from_error()
-706
+
                                         else:
-707
+
                                                 print "Silence: Call Terminated"
-708
-​
-709
-​
-710
+
+
+
+
+
                                 if ("RING" in modem_data) or ("DATE" in modem_data) or ("TIME" in modem_data) or ("NMBR" in modem_data):
-711
+
                                         if "RING" in modem_data.strip(chr(16)):
-712
+
                                                 ring_data = ring_data + modem_data
-713
+
                                                 ring_count = ring_data.count("RING")
-714
+
                                                 if ring_count == 1:
-715
+
                                                         pass
-716
+
                                                         print modem_data
-717
+
                                                 elif ring_count == RINGS_BEFORE_AUTO_ANSWER:
-718
+
                                                         ring_data = ""
-719
+
                                                         play_audio()                                                    
-720
+
 #=================================================================
-721
-​
-722
-​
-723
-​
-724
+
+
+
+
+
+
+
 #=================================================================
-725
+
 # Close the Serial Port
-726
+
 #=================================================================
-727
+
 def close_modem_port():
-728
+
         try:
-729
+
                 exec_AT_cmd("ATH")
-730
+
         except:
-731
+
                 pass
-732
-​
-733
+
+
+
         try:
-734
+
                 if analog_modem.isOpen():
-735
+
                         analog_modem.close()
-736
+
                         print ("Serial Port closed...")
-737
+
         except:
-738
+
                 print "Error: Unable to close the Serial Port."
-739
+
                 sys.exit()
-740
+
 #=================================================================
-741
-​
-742
-​
-743
+
+
 init_modem_settings()
-744
-​
-745
+
 #Start a new thread to listen to modem data 
-746
+
 data_listener_thread = threading.Thread(target=read_data)
-747
+
 data_listener_thread.start()
-748
-​
-749
-​
-750
+
 # Close the Modem Port when the program terminates
-751
+
 atexit.register(close_modem_port)
-752
-​
-753
 
 		pass
 
